@@ -10,7 +10,7 @@ const options = {
         u: 'c'
     },
     headers: {
-        //key
+        //key 1
         'X-RapidAPI-Host': 'yahoo-weather5.p.rapidapi.com'
     }
 };
@@ -31,7 +31,7 @@ const geocodeOptions = {
         language: 'en'
     },
     headers: {
-        //key
+        //key 2
         'X-RapidAPI-Host': 'trueway-geocoding.p.rapidapi.com'
     }
 };
