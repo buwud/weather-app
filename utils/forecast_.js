@@ -26,7 +26,7 @@ const forecast = async (latitude, longitude, callback) =>
             try
             {
                 const response = JSON.parse(data);
-                callback(undefined, response.weather[0].description + ' and the wind is ' + response.wind.speed + ' km/h');
+                callback(undefined, 'Currently ' + (response.main.temp - 273.15).toFixed(2) + ' degrees out there with ' + response.weather[0].description + '. The wind is blowing at ' + response.wind.speed + 'km/h');
             } catch (error)
             {
                 callback(error, null);
