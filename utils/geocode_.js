@@ -16,20 +16,20 @@ const geocode = (address, callback) =>
         }
     };
 
-    request(geocodeOptions, (error, response, body) =>
+    request(geocodeOptions, (error, { body }) =>
     {
         if (error)
         {
             callback('Unable to connect to the server!', undefined)
-        } else if (response.body.results.length === 0)
+        } else if (body.results.length === 0)
         {
             callback('Unable to find the location!', undefined)
         } else
         {
             callback(undefined, {
-                latitude: response.body.results[0].location.lat,
-                longitude: response.body.results[0].location.lng,
-                address: response.body.results[0].address,
+                latitude: body.results[0].location.lat,
+                longitude: body.results[0].location.lng,
+                address: body.results[0].address,
 
             })
         }

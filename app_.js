@@ -26,21 +26,23 @@ else if (isNumber(input.trim()) && process.argv[3] && isNumber(process.argv[3].t
 }
 else
 {
-    geocode(input, (error, data) =>
+    geocode(input, (error, { latitude, longitude, address }) =>
     {
         if (error)
         {
             return console.log(error)
         }
-        forecast(data.latitude, data.longitude, (error, forecastData) =>
+        forecast(latitude, longitude, (error, forecastData) =>
         {
             if (error)
             {
                 return console.log(error)
             }
 
-            console.log(data.address)
+            console.log(address)
             console.log(forecastData)
         })
     })
+
+
 }
