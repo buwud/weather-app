@@ -4,41 +4,48 @@ const forecast = async (latitude, longitude, callback) =>
 {
     const options = {
         method: 'GET',
-        hostname: 'open-weather13.p.rapidapi.com',
-        path: `/city/latlon/${ latitude }/${ longitude }`, // Properly format the path
+        hostname: 'weatherapi-com.p.rapidapi.com',
+        port: null,
+        path: '/current.json?q=' + latitude + '%2C' + longitude,
         headers: {
-            'X-RapidAPI-Host': 'open-weather13.p.rapidapi.com',
             //key
-        },
+            'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
+        }
     };
 
-    const req = https.request(options, function (res)
+    const req = https.request(options, (res) =>
     {
         let data = '';
 
-        res.on('data', function (chunk)
+        res.on('data', (chunk) =>
         {
             data += chunk;
         });
 
-        res.on('end', function ()
+        res.on('end', () =>
         {
             try
             {
-                const response = JSON.parse(data);
-                callback(undefined, 'Currently ' + (response.main.temp - 273.15).toFixed(2) + ' degrees out there with ' + response.weather[0].description + '. The wind is blowing at ' + response.wind.speed + 'km/h');
+                const parsedData = JSON.parse(data);
+                if (parsedData)
+                {
+                    callback(null, 'Currently ' + parsedData.current.temp_c + ' degrees out there and ' + parsedData.current.condition.text + '. The wind is blowing at ' + parsedData.current.wind_kph + 'km/h');
+                } else
+                {
+                    callback('Location data not found', null);
+                }
             } catch (error)
             {
                 callback(error, null);
             }
         });
-
     });
 
-    req.on('error', function (error)
+    req.on('error', (error) =>
     {
-        callback(error, undefined);
+        callback(error, null);
     });
+
 
     req.end();
 
