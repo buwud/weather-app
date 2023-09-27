@@ -47,9 +47,27 @@ app.get('/help', (req, res) =>
 
 app.get('/weather', (req, res) =>
 {
-    res.send({
+    res.render('weather', {
         location: 'kayseri',
         forecast: 38
+    })
+})
+
+app.get('/help/*', (req, res) =>
+{
+    res.render('helpError', {
+        title: 'Error',
+        author: 'buwu',
+        message: 'Help article not found'
+    })
+})
+
+app.get('*', (req, res) =>
+{
+    res.render('404', {
+        title: 'Error',
+        author: 'buwu',
+        message: 'Page not found'
     })
 })
 
