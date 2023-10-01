@@ -2,6 +2,10 @@ const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
 
+const request = require('request');
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
+
 console.log(__dirname)
 console.log(path.join(__dirname, '../public'))
 
@@ -45,11 +49,35 @@ app.get('/help', (req, res) =>
     })
 })
 
+
 app.get('/weather', (req, res) =>
 {
-    res.render('weather', {
-        location: 'kayseri',
-        forecast: 38
+    if (!req.query.address)
+    {
+        return res.send({
+            error: 'You must provide a location!'
+        })
+    }
+    const input = req.query.address
+    console.log(req.query.address)
+    geocode(input, (error, { latitude, longitude, address }) =>
+    {
+        if (error)
+        {
+            return res.send({ output: error })
+        }
+        forecast(latitude, longitude, (error, forecastData) =>
+        {
+            if (error)
+            {
+                return res.send({ output: error })
+            }
+
+            res.send({
+                addressO: address,
+                forecastDataO: forecastData
+            })
+        })
     })
 })
 
@@ -70,6 +98,8 @@ app.get('*', (req, res) =>
         message: 'Page not found'
     })
 })
+
+
 
 app.listen(3000, () =>
 {
