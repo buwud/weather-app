@@ -60,22 +60,22 @@ app.get('/weather', (req, res) =>
     }
     const input = req.query.address
     console.log(req.query.address)
-    geocode(input, (error, { latitude, longitude, address }) =>
+    geocode(input, (error, { latitude=0, longitude, address } = {}) =>
     {
         if (error)
         {
-            return res.send({ output: error })
+            return res.send({ error })
         }
         forecast(latitude, longitude, (error, forecastData) =>
         {
             if (error)
             {
-                return res.send({ output: error })
+                return res.send({ error })
             }
 
             res.send({
-                addressO: address,
-                forecastDataO: forecastData
+                address,
+                forecastData
             })
         })
     })
