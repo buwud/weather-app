@@ -12,21 +12,20 @@
 <body>
     <div class="main-content">
         {{>header}}
-        <a>Use this site to get your weather!</a>
+        <div class="weather-text">Use this site to get your weather!</div>
         <form>
             <br>
-            <input placeholder="Location">
-            <button>Search</button>
+            <div class="search-box">
+                <input type="text" placeholder="Type your city name or your coordinates w/this syntax => long,lang ">
+                <button>Search</button>
+            </div>
             <p id="message-1"></p>
             <p id="message-2"></p>
         </form>
-
-
     </div>
     {{>footer}}
 
     <script src="/js/app.js"></script>
 </body>
-
 
 </html>
