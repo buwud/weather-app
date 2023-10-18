@@ -5,7 +5,7 @@ const search = document.querySelector('input');
 const messageOne = document.querySelector('#message-1');
 const messageTwo = document.querySelector('#message-2');
 
-// Function to show messages
+//at first they are not visible
 function showMessages() {
     messageOne.style.display = 'block';
     messageTwo.style.display = 'block';
@@ -21,20 +21,19 @@ weatherForm.addEventListener('submit', (e) => {
 
     fetch('http://localhost:3000/weather?address=' + location).then((response) => {
         response.json().then((data) => {
+            console.log(response.status);
             if (data.error) {
                 messageOne.textContent = data.error;
             } else {
                 messageOne.textContent = data.address;
                 messageTwo.textContent = data.forecastData;
-                showMessages(); // Call the function to display messages
+                showMessages();
             }
         });
     });
 });
 
 document.querySelector('.search-box button').addEventListener('click', function () {
-    // Your search logic here
 
-    // Show the messages
     showMessages();
 });
