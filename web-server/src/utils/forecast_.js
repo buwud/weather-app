@@ -1,7 +1,6 @@
 const https = require('https');
 
-const forecast = async (latitude, longitude, callback) =>
-{
+const forecast = async (latitude, longitude, callback) => {
     const options = {
         method: 'GET',
         hostname: 'weatherapi-com.p.rapidapi.com',
@@ -13,36 +12,28 @@ const forecast = async (latitude, longitude, callback) =>
         }
     };
 
-    const req = https.request(options, (res) =>
-    {
+    const req = https.request(options, (res) => {
         let data = '';
 
-        res.on('data', (chunk) =>
-        {
+        res.on('data', (chunk) => {
             data += chunk;
         });
 
-        res.on('end', () =>
-        {
-            try
-            {
+        res.on('end', () => {
+            try {
                 const parsedData = JSON.parse(data);
-                if (parsedData)
-                {
+                if (parsedData) {
                     callback(null, 'Currently ' + parsedData.current.temp_c + ' degrees out there and ' + parsedData.current.condition.text + '. The wind is blowing at ' + parsedData.current.wind_kph + 'km/h');
-                } else
-                {
+                } else {
                     callback('Location data not found', null);
                 }
-            } catch (error)
-            {
+            } catch (error) {
                 callback(error, null);
             }
         });
     });
 
-    req.on('error', (error) =>
-    {
+    req.on('error', (error) => {
         callback(error, null);
     });
 
