@@ -24,55 +24,44 @@ hbs.registerPartials(partialsPath)
 //setup static directory to serve 
 app.use(express.static(path.join(publicDir)))//root
 
-app.get('', (req, res) =>
-{
+app.get('', (req, res) => {
     res.render('index', {
         title: 'weather',
         author: 'buwu'
     })
 })
 
-app.get('/about', (req, res) =>
-{
+app.get('/about', (req, res) => {
     res.render('about', {
         title: 'about',
         author: 'buwu'
     })
 })
 
-app.get('/help', (req, res) =>
-{
+app.get('/help', (req, res) => {
     res.render('help', {
         title: 'help message',
         author: 'buwu',
         helpText: 'This is some helpful text'
     })
 })
-
-
-app.get('/weather', (req, res) =>
-{
-    if (!req.query.address)
-    {
+//app.use(limiter)
+app.get('/weather', (req, res) => {
+    if (!req.query.address) {
         return res.send({
             error: 'You must provide a location!'
         })
     }
     const input = req.query.address
     console.log(req.query.address)
-    geocode(input, (error, { latitude=0, longitude, address } = {}) =>
-    {
-        if (error)
-        {
+    geocode(input, (error, { latitude = 0, longitude, address } = {}) => {
+        if (error) {
             return res.send({ error })
         }
-        forecast(latitude, longitude, (error, forecastData) =>
-        {
-            if (error)
-            {
+        forecast(latitude, longitude, (error, forecastData) => {
+            if (error) {
                 return res.send({ error })
             }
-
             res.send({
                 address,
                 forecastData
@@ -81,8 +70,7 @@ app.get('/weather', (req, res) =>
     })
 })
 
-app.get('/help/*', (req, res) =>
-{
+app.get('/help/*', (req, res) => {
     res.render('helpError', {
         title: 'Error',
         author: 'buwu',
@@ -90,8 +78,7 @@ app.get('/help/*', (req, res) =>
     })
 })
 
-app.get('*', (req, res) =>
-{
+app.get('*', (req, res) => {
     res.render('404', {
         title: 'Error',
         author: 'buwu',
@@ -99,7 +86,6 @@ app.get('*', (req, res) =>
     })
 })
 
-app.listen(3000, () =>
-{
+app.listen(3000, () => {
     console.log('server is up on port 3000')
 })

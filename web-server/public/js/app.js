@@ -1,3 +1,5 @@
+//const logs = require('./log.js');
+
 console.log('clientside js file is loaded');
 
 const weatherForm = document.querySelector('form');
@@ -18,12 +20,21 @@ weatherForm.addEventListener('submit', async (e) => {
 
     messageOne.textContent = 'Loading...';
     console.log('clicked')
+
+
+
     button.style.cursor = 'auto';
     button.disabled = true;
     try {
         const response = await fetchWithTimeout('http://localhost:3000/weather?address=' + location, { timeout: 6000 });
 
+        const transactionDate = response.headers.get('Date');
+        console.log('Date', transactionDate);
+
         if (response.ok) {
+
+            logs.addLog('log', transactionDate)
+
             response.json().then((data) => {
 
                 if (data.error) {
@@ -57,6 +68,8 @@ weatherForm.addEventListener('submit', async (e) => {
 
     }
 });
+
+
 
 async function fetchWithTimeout(resource, options = {}) {
     button.style.cursor = 'auto';
