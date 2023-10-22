@@ -84,10 +84,6 @@ weatherForm.addEventListener('submit', async (e) => {
     }
 });
 
-async function sendDatetoServer(date) {
-
-}
-
 async function fetchWithTimeout(resource, options = {}) {
     button.style.cursor = 'auto';
     const { timeout = 8000 } = options;
