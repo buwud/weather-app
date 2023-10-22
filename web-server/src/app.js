@@ -1,3 +1,4 @@
+const fs = require('fs')
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
@@ -45,7 +46,7 @@ app.get('/help', (req, res) => {
         helpText: 'This is some helpful text'
     })
 })
-//app.use(limiter)
+
 app.get('/weather', (req, res) => {
     if (!req.query.address) {
         return res.send({
@@ -67,6 +68,20 @@ app.get('/weather', (req, res) => {
                 forecastData
             })
         })
+    })
+})
+app.use(express.json())
+app.post('/log', (req, res) => {
+    const date = req.body
+
+    fs.writeFile('log.json', JSON.stringify(date), (err) => {
+        if (err) {
+            console.error('Error occured writing the JSON file')
+            res.status(500).json({ error: 'Failed to write the data to log file' })
+        } else {
+            console.log('Date written to JSON file')
+            res.status(200).json({ message: 'Date saved successfully' })
+        }
     })
 })
 

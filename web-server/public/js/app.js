@@ -20,11 +20,9 @@ weatherForm.addEventListener('submit', async (e) => {
 
     messageOne.textContent = 'Loading...';
     console.log('clicked')
-
-
-
     button.style.cursor = 'auto';
     button.disabled = true;
+
     try {
         const response = await fetchWithTimeout('http://localhost:3000/weather?address=' + location, { timeout: 6000 });
 
@@ -33,7 +31,26 @@ weatherForm.addEventListener('submit', async (e) => {
 
         if (response.ok) {
 
-            logs.addLog('log', transactionDate)
+            console.log('response okaey')
+            //yeni endpointe burdan fetch olcak
+            try {
+                const response = await fetch('http://localhost:3000/log',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ transactionDate }),
+                    })
+
+                if (response.ok) {
+                    console.log('Date sent to the server')
+                }
+
+            } catch (error) {
+                console.log('Failed to send the date to the server')
+            }
+            //*****
 
             response.json().then((data) => {
 
@@ -64,12 +81,12 @@ weatherForm.addEventListener('submit', async (e) => {
             button.disabled = false;
             button.style.cursor = 'pointer';
         }, 1000);
-
-
     }
 });
 
+async function sendDatetoServer(date) {
 
+}
 
 async function fetchWithTimeout(resource, options = {}) {
     button.style.cursor = 'auto';
