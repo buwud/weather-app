@@ -1,4 +1,5 @@
 const fs = require('fs')
+const https = require('https')
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
@@ -6,10 +7,12 @@ const hbs = require('hbs')
 const request = require('request');
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
+const log = require('./log')
 
 console.log(__dirname)
 console.log(path.join(__dirname, '../public'))
 
+const port = 3000
 const app = express()
 
 //define paths for express config
@@ -48,56 +51,39 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
+    const date0 = new Date()
+    let isLog = 0
+    console.log(date0)
     if (!req.query.address) {
         return res.send({
             error: 'You must provide a location!'
         })
     }
+    else {
+        isLog = log.doLog()
+        console.log(isLog)
+    }
+
     const input = req.query.address
     console.log(req.query.address)
-    geocode(input, (error, { latitude = 0, longitude, address } = {}) => {
-        if (error) {
-            return res.send({ error })
-        }
-        forecast(latitude, longitude, (error, forecastData) => {
+
+    if (isLog <= 450) {
+        geocode(input, (error, { latitude = 0, longitude, address } = {}) => {
+
             if (error) {
                 return res.send({ error })
             }
-            res.send({
-                address,
-                forecastData
+            forecast(latitude, longitude, (error, forecastData) => {
+                if (error) {
+                    return res.send({ error })
+                }
+                res.send({
+                    address,
+                    forecastData
+                })
             })
         })
-    })
-})
-app.use(express.json())
-app.post('/log', (req, res) => {
-    const date = req.body
-
-    fs.readFile('log.json', (err, data) => {
-        if (err) {
-            console.error('Error reading JSON file:', err);
-            return res.status(500).json({ error: 'Failed to read the data from the log file' });
-        }
-        let jsonData = JSON.parse(data);
-        if (!Array.isArray(jsonData)) {
-            jsonData = [];
-        }
-
-        jsonData.push(date);
-
-        fs.writeFile('log.json', JSON.stringify(jsonData), (writeErr) => {
-            if (writeErr) {
-                console.error('Error occured writing the JSON file')
-                res.status(500).json({ error: 'Failed to write the data to log file' })
-            } else {
-                console.log('Date written to JSON file')
-                res.status(200).json({ message: 'Date saved successfully' })
-            }
-        })
-    })
-
-
+    }
 })
 
 app.get('/help/*', (req, res) => {
@@ -116,6 +102,16 @@ app.get('*', (req, res) => {
     })
 })
 
-app.listen(3000, () => {
-    console.log('server is up on port 3000')
+app.listen(port, () => {
+    console.log('server is up on port ' + port)
 })
+
+// const options = {
+//     key: fs.readFileSync("privkey.pem"),
+//     cert: fs.readFileSync("fullchain.pem"),
+// };
+
+// https.createServer(options, app)
+//     .listen(3000, function (req, res) {
+//         console.log("Server started at port 3000");
+//     });

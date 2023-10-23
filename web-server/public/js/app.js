@@ -1,5 +1,3 @@
-//const logs = require('./log.js');
-
 console.log('clientside js file is loaded');
 
 const weatherForm = document.querySelector('form');
@@ -24,34 +22,9 @@ weatherForm.addEventListener('submit', async (e) => {
     button.disabled = true;
 
     try {
-        const response = await fetchWithTimeout('http://localhost:3000/weather?address=' + location, { timeout: 6000 });
-
-        const transactionDate = response.headers.get('Date');
-        console.log('Date', transactionDate);
+        const response = await fetch('http://localhost:3000/weather?address=' + location, { timeout: 6000 });
 
         if (response.ok) {
-
-            console.log('response okaey')
-            //yeni endpointe burdan fetch olcak
-            try {
-                const response = await fetch('http://localhost:3000/log',
-                    {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ transactionDate }),
-                    })
-
-                if (response.ok) {
-                    console.log('Date sent to the server')
-                }
-
-            } catch (error) {
-                console.log('Failed to send the date to the server')
-            }
-            //*****
-
             response.json().then((data) => {
 
                 if (data.error) {
