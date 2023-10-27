@@ -54,18 +54,14 @@ app.get('/help', (req, res) => {
 app.get('/weather', (req, res) => {
 
     isLog = log.doLog()
-    console.log(isLog)
-
+    //console.log(isLog)
     if (!req.query.address) {
         return res.send({
             error: 'You must provide a location!'
         })
     }
-
-
     const input = req.query.address
-    console.log(req.query.address)
-
+    //console.log(req.query.address)
     if (isLog <= 450) {
         geocode(input, (error, { latitude = 0, longitude, address } = {}) => {
 
@@ -82,6 +78,10 @@ app.get('/weather', (req, res) => {
                 })
             })
         })
+    }
+    else {
+        const errorMessage = 'Enough weather attempts for today, see you tomorrow :3'
+        res.send({ errorMessage })
     }
 })
 
