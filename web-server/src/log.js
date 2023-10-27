@@ -1,41 +1,35 @@
-let logList = require('./log.json')
 const fs = require('fs')
+const moment = require('moment')
+let jsonData
 
 const doLog = function () {
-    const date0 = new Date()
-    fs.readFile('log.json', (err, data) => {
-        if (err) {
-            console.error('Error reading JSON file:', err);
-        }
+    try {
+        const json = fs.readFileSync('log.json', 'utf-8')
+        jsonData = JSON.parse(json)
+    }
+    catch (error) {
+        console.error('error reading or parsing json ')
+        jsonData = { Date: '', Counter: 0 }
+    }
 
-        if (logList.length != 0) {
-            logList = JSON.parse(data);
-            if (!Array.isArray(logList)) {
-                logList = [];
-            }
-        }
-        else {
-            logList = [];
-        }
+    const currDate = moment().format('YYYY-MM-DD')
+    const jsonDate = moment(jsonData[0].Date).format('YYYY-MM-DD')
 
-        logList.push({ "Date": date0 });
+    if (jsonDate === currDate) {
+        jsonData[0].Counter += 1
+    }
+    else {
+        jsonData[0].Date = currDate
+        jsonData[0].Counter = 0
+    }
 
-        fs.writeFile('log.json', JSON.stringify(logList), (writeErr) => {
-            if (writeErr) {
-                console.error('Error occured writing the JSON file')
+    fs.writeFileSync('log.json', JSON.stringify(jsonData, null, 2), 'utf-8');
 
-            } else {
-                console.log('Date written to JSON file')
+    // console.log('Current Date:', currDate);
+    // console.log('json date: ', jsonDate)
+    // console.log('Counter:', jsonData[0].Counter);
 
-            }
-        })
-    })
-    const sameDayOfMonth = logList.filter((entry) => {
-        const entryDate = new Date(entry.Date);
-        return entryDate.getDate() === date0.getDate();
-    });
-
-    return sameDayOfMonth.length;
+    return jsonData[0].Counter
 }
 module.exports = {
     doLog: doLog

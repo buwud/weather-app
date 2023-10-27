@@ -8,6 +8,7 @@ const request = require('request');
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
 const log = require('./log')
+const { count } = require('console')
 
 console.log(__dirname)
 console.log(path.join(__dirname, '../public'))
@@ -51,18 +52,16 @@ app.get('/help', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
-    const date0 = new Date()
-    let isLog = 0
-    console.log(date0)
+
+    isLog = log.doLog()
+    console.log(isLog)
+
     if (!req.query.address) {
         return res.send({
             error: 'You must provide a location!'
         })
     }
-    else {
-        isLog = log.doLog()
-        console.log(isLog)
-    }
+
 
     const input = req.query.address
     console.log(req.query.address)
