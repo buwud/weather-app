@@ -3,12 +3,14 @@ const https = require('https')
 const path = require('path')
 const express = require('express')
 const hbs = require('hbs')
+const util = require('util');
 
 const request = require('request');
 const geocode = require('./utils/geocode')
 const forecast = require('./utils/forecast')
 const log = require('./log')
-const { count } = require('console')
+const { count, error } = require('console')
+const { isString } = require('util')
 
 console.log(__dirname)
 console.log(path.join(__dirname, '../public'))
@@ -53,7 +55,9 @@ app.get('/help', (req, res) => {
 
 app.get('/weather', (req, res) => {
 
+    let lat, long
     isLog = log.doLog()
+
     //console.log(isLog)
     if (!req.query.address) {
         return res.send({
@@ -61,14 +65,27 @@ app.get('/weather', (req, res) => {
         })
     }
     const input = req.query.address
+    let isParsed = true
     //console.log(req.query.address)
+    try {//input parsing
+        const coordinates = input.split(',')
+        lat = coordinates[0].trim()
+        long = coordinates[1].trim()
+    } catch (error) {
+        isParsed = false
+        console.error('Error occured: parsing the input')
+    }
+
     if (isLog <= 450) {
         geocode(input, (error, { latitude = 0, longitude, address } = {}) => {
-
             if (error) {
                 return res.send({ error })
             }
-            forecast(latitude, longitude, (error, forecastData) => {
+            if (!isParsed) {
+                lat = latitude
+                long = longitude
+            }
+            forecast(lat, long, (error, forecastData) => {
                 if (error) {
                     return res.send({ error })
                 }
