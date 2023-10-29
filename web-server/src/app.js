@@ -128,6 +128,6 @@ app.listen(port, () => {
 // };
 
 // https.createServer(options, app)
-//     .listen(3000, function (req, res) {
-//         console.log("Server started at port 3000");
+//     .listen(port, function (req, res) {
+//         console.log("Server started at port "+port);
 //     });

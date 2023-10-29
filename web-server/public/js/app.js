@@ -82,6 +82,7 @@ async function fetchWithTimeout(resource, options = {}) {
 document.querySelector('.search-box button').addEventListener('click', function () {
     showMessages()
 })
-document.querySelector('.del-button').addEventListener('click', function () {
+document.querySelector('.del-button').addEventListener('click', function (e) {
+    e.preventDefault()
     clearAll()
 })
