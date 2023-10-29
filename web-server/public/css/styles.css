@@ -136,15 +136,30 @@ input[type="text"] {
     display: flex;
 }
 
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
 button {
     cursor: pointer;
-    background-color: #f0db4f;
-    color: #333;
     border: none;
+    color: #333;
+    background-color: #f0db4f;
     border-radius: 5px;
     padding: 10px 20px;
-    height: 100%;
     transition: background-color 0.3s ease, transform 0.1s ease;
+    height: 100%;
+}
+
+.regular-button {
+    background-color: #f0db4f;
+    color: #333;
+}
+
+.del-button {
+    background-color: #f04f4f;
+    color: #ffffff;
 }
 
 #message-1,
