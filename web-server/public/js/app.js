@@ -39,6 +39,9 @@ weatherForm.addEventListener('submit', async (e) => {
                 } else {
                     messageOne.textContent = data.address
                     messageTwo.textContent = data.forecastData
+                    const condition = data.condition
+
+                    //sunny - cloudy - clear - fog - rain - 
                     showMessages()
                 }
             });

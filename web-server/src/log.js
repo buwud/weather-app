@@ -20,7 +20,7 @@ const doLog = function () {
     }
     else {
         jsonData[0].Date = currDate
-        jsonData[0].Counter = 0
+        jsonData[0].Counter = 1
     }
 
     fs.writeFileSync('log.json', JSON.stringify(jsonData, null, 2), 'utf-8');
