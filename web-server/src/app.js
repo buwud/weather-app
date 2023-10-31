@@ -73,7 +73,7 @@ app.get('/weather', (req, res) => {
         long = coordinates[1].trim()
     } catch (error) {
         isParsed = false
-        console.error('Error occured: parsing the input')
+        //console.error('Error occured: parsing the input')
     }
 
     if (isLog <= 450) {
@@ -91,8 +91,7 @@ app.get('/weather', (req, res) => {
                 }
                 res.send({
                     address,
-                    forecastData,
-                    condition
+                    forecastData
                 })
             })
         })

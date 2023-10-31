@@ -23,7 +23,8 @@ weatherForm.addEventListener('submit', async (e) => {
     const location = search.value;
 
     messageOne.textContent = 'Loading...'
-    console.log('clicked')
+    //console.log('clicked')
+
     button.style.cursor = 'auto'
     button.disabled = true
 
@@ -37,11 +38,9 @@ weatherForm.addEventListener('submit', async (e) => {
                     messageOne.textContent = data.error
                     messageTwo.textContent = '...'
                 } else {
+                    console.log(search.value)
                     messageOne.textContent = data.address
                     messageTwo.textContent = data.forecastData
-                    const condition = data.condition
-
-                    //sunny - cloudy - clear - fog - rain - 
                     showMessages()
                 }
             });

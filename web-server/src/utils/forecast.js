@@ -26,7 +26,6 @@ const forecast = async (latitude, longitude, callback) => {
                 if (parsedData) {
                     callback(null, {
                         forecastData: 'Currently ' + parsedData.current.temp_c + ' degrees out there and ' + parsedData.current.condition.text + '. The wind is blowing at ' + parsedData.current.wind_kph + 'km/h',
-                        condition: parsedData.current.condition.text
                     });
                 } else {
                     callback('Location data not found', null);
@@ -40,10 +39,7 @@ const forecast = async (latitude, longitude, callback) => {
     req.on('error', (error) => {
         callback(error, null);
     });
-
-
     req.end();
-
 };
 
 module.exports = forecast;

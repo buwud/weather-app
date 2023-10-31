@@ -136,6 +136,11 @@ input[type="text"] {
     display: flex;
 }
 
+.condition {
+    width: auto;
+    display: flex;
+}
+
 .button-container {
     display: flex;
     gap: 10px;
